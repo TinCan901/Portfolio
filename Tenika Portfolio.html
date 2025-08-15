@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Sets the character encoding for the document -->
+    <meta charset="UTF-8">
+    <!-- Ensures the site is responsive on all devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- The title that appears in the browser tab -->
+    <title>Tenika Potgieter - Portfolio</title>
+    
+    <!-- Link to the Tailwind CSS framework via a CDN. -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Links to load the 'Inter' font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS for a new blue theme and animations -->
+    <style>
+        /* Sets the 'Inter' font and a deep blue background */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #060a1f; /* A very dark blue for the main background */
+            color: #e0f2ff; /* A light blue for the text */
+            transition: background-color 0.5s ease, color 0.5s ease;
+            overflow-x: hidden; /* Prevents horizontal scroll from animations */
+        }
+
+        /* Custom scrollbar styling for the new blue theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #111827; /* Darker blue-gray scrollbar track */
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6; /* Bright blue accent for the scrollbar thumb */
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #60a5fa; /* Lighter blue on hover */
+        }
+        
+        /* NEW: Canvas element for the wavy background */
+        #waveCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1; /* Places the canvas behind all other content */
+        }
+
+        /* Hero section animation for the title and subtitle */
+        @keyframes fadeInSlideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .animate-hero-title { animation: fadeInSlideUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards; opacity: 0; }
+        .animate-hero-subtitle { animation: fadeInSlideUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.3s forwards; opacity: 0; }
+        .animate-hero-button { animation: fadeInSlideUp 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.6s forwards; opacity: 0; }
+
+        /* General section animation with a slight rotation and more dramatic slide-up */
+        .animated-section {
+            opacity: 0;
+            transform: translateY(80px) rotateZ(3deg);
+            transition: opacity 1.2s ease-out, transform 1.2s cubic-bezier(0.2, 0.8, 0.2, 1.0);
+        }
+        .animated-section.is-visible {
+            opacity: 1;
+            transform: translateY(0) rotateZ(0deg);
+        }
+
+        /* Staggered animation for list items and cards */
+        .animated-list-item {
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: opacity 0.8s ease-out, transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .animated-list-item.is-visible {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        
+        /* Pulse animation for icons */
+        @keyframes pulse-once {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        .icon-pulse.is-visible { animation: pulse-once 0.8s ease-in-out; }
+
+        /* Card hover effect: subtle lift and shadow change */
+        .card-hover-effect {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s ease;
+        }
+        .card-hover-effect:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button hover effect */
+        .button-hover-effect {
+            transition: all 0.3s ease;
+        }
+        .button-hover-effect:hover {
+            transform: scale(1.05);
+            background-color: #1e40af; /* A darker blue on hover */
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-[#060a1f] text-[#e0f2ff]">
+
+    <!-- The canvas for the wavy background animation -->
+    <canvas id="waveCanvas"></canvas>
+
+    <!-- Header & Navigation Bar -->
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 bg-[#060a1f] bg-opacity-70 backdrop-blur-sm shadow-lg transition-shadow duration-300">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-extrabold text-[#3b82f6]">Tenika Potgieter</a>
+            <div class="hidden md:flex space-x-8 text-lg font-medium">
+                <a href="#about" class="hover:text-[#3b82f6] transition-colors duration-300">About</a>
+                <a href="#skills" class="hover:text-[#3b82f6] transition-colors duration-300">Skills</a>
+                <a href="#education" class="hover:text-[#3b82f6] transition-colors duration-300">Education</a>
+                <a href="#experience" class="hover:text-[#3b82f6] transition-colors duration-300">Experience</a>
+                <a href="#contact" class="hover:text-[#3b82f6] transition-colors duration-300">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main content with padding to account for the fixed header -->
+    <main class="pt-20">
+        
+        <!-- Hero Section - A full-screen banner with a deep blue theme -->
+        <section id="hero" class="relative h-screen flex items-center justify-center p-8 bg-cover bg-center">
+            <div class="relative z-10 text-center max-w-5xl">
+                <h1 class="animate-hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4 text-white drop-shadow-lg">Hello, I'm <span class="text-[#3b82f6]">Tenika Potgieter</span>.</h1>
+                <p class="animate-hero-subtitle text-xl sm:text-2xl font-light mb-8 text-[#e0f2ff]">A Software Developer with a passion for creative and dedicated problem-solving.</p>
+                <a href="#about" class="animate-hero-button inline-block bg-[#2563eb] text-white font-bold py-4 px-10 rounded-full shadow-lg button-hover-effect active:scale-95">Explore My Work</a>
+            </div>
+        </section>
+
+        <!-- About Me Section -->
+        <section id="about" class="py-16 md:py-24 animated-section relative z-10">
+            <div class="container mx-auto px-6">
+                <div class="flex flex-col md:flex-row items-center gap-16">
+                    <div class="md:w-1/2 flex justify-center">
+                         <img src="uploaded:PFP.jpg-c3ebface-18e3-4b23-a9aa-c025877f448b" alt="Tenika Potgieter Profile" class="rounded-full shadow-2xl w-64 h-64 md:w-80 md:h-80 object-cover border-4 border-[#3b82f6] transform transition-transform duration-500 hover:scale-105">
+                    </div>
+                    <div class="md:w-1/2">
+                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 border-b-4 border-[#3b82f6] pb-2 inline-block">About Me</h2>
+                        <p class="text-lg leading-relaxed text-[#c6d8e2] mb-4">
+                            I am a passionate and results-driven Software Developer with a unique blend of technical expertise and creative flair. My background is rooted in robust programming foundations and a proven ability to apply my knowledge in real-world scenarios, as demonstrated by my 100% score in Work Integrated Learning.
+                        </p>
+                        <p class="text-lg leading-relaxed text-[#c6d8e2] mb-4">
+                            With experience leveraging SCADA and Archestra systems to automate industrial processes, I thrive on solving complex problems. My skills extend beyond code to include creative application design with FlutterFlow and strategic marketing with Canva. This diverse skill set allows me to approach projects from multiple perspectives, ensuring a holistic and polished final product.
+                        </p>
+                        <p class="text-lg leading-relaxed text-[#c6d8e2]">
+                            I am a dedicated team player and a fast learner, committed to expanding my skill set and contributing to innovative solutions. My history in acting has equipped me with strong communication and presentation skills, making me adept at collaborating and conveying ideas with clarity and confidence.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="py-16 md:py-24 bg-[#0a113a] animated-section relative z-10">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 border-b-4 border-[#3b82f6] pb-2 inline-block">Skills & Expertise</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    
+                    <!-- Programming Skills Card -->
+                    <div class="bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border border-transparent hover:border-[#3b82f6]">
+                        <h3 class="text-2xl font-semibold text-[#3b82f6] mb-4 flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#3b82f6] icon-pulse"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+                            Programming
+                        </h3>
+                        <ul class="text-lg text-[#c6d8e2] space-y-2 text-left">
+                            <li class="animated-list-item">Junior C# experience</li>
+                            <li class="animated-list-item">Web Development</li>
+                            <li class="animated-list-item">Robotic Development</li>
+                            <li class="animated-list-item">Application Creation (FlutterFlow)</li>
+                            <li class="animated-list-item">Software Development</li>
+                            <li class="animated-list-item">Programmer Ethics</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Technical Skills Card -->
+                    <div class="bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border border-transparent hover:border-[#3b82f6]">
+                        <h3 class="text-2xl font-semibold text-[#3b82f6] mb-4 flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#3b82f6] icon-pulse"><path d="M12 2a10 10 0 1 0 10 10A10.007 10.007 0 0 0 12 2Zm0 16a6 6 0 1 1 6-6 6.007 6.007 0 0 1-6 6Z"></path></svg>
+                            Technical
+                        </h3>
+                        <ul class="text-lg text-[#c6d8e2] space-y-2 text-left">
+                            <li class="animated-list-item">Junior SCADA experience</li>
+                            <li class="animated-list-item">Microsoft Office proficiency</li>
+                            <li class="animated-list-item">Network Architecture</li>
+                            <li class="animated-list-item">Cybernetics</li>
+                            <li class="animated-list-item">Digital Literacy</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Creative Skills Card -->
+                    <div class="bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border border-transparent hover:border-[#3b82f6]">
+                        <h3 class="text-2xl font-semibold text-[#3b82f6] mb-4 flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#3b82f6] icon-pulse"><path d="M4 12a8 8 0 0 1 8-8V2a10 10 0 0 0-8 1.95V12zM12 20a8 8 0 0 1-8-8H2a10 10 0 0 0 8 10V20zM20 12a8 8 0 0 1-8 8v2a10 10 0 0 0 8-1.95V12zM12 4a8 8 0 0 1 8 8h2a10 10 0 0 0-8-10V4z"></path></svg>
+                            Creative
+                        </h3>
+                        <ul class="text-lg text-[#c6d8e2] space-y-2 text-left">
+                            <li class="animated-list-item">Marketing & Design (Canva)</li>
+                            <li class="animated-list-item">Junior Brewer</li>
+                            <li class="animated-list-item">Public speaking and presentation</li>
+                            <li class="animated-list-item">Acting</li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Languages Card -->
+                    <div class="bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border border-transparent hover:border-[#3b82f6]">
+                        <h3 class="text-2xl font-semibold text-[#3b82f6] mb-4 flex items-center justify-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#3b82f6] icon-pulse"><path d="M5 22h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2z"></path><line x1="12" x2="12" y1="2" y2="22"></line><path d="M12 2a10 10 0 1 0 10 10A10.01 10.01 0 0 0 12 2z"></path></svg>
+                            Languages
+                        </h3>
+                        <ul class="text-lg text-[#c6d8e2] space-y-2 text-left">
+                            <li class="animated-list-item">Afrikaans (First Language)</li>
+                            <li class="animated-list-item">English (Second Language)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education Section -->
+        <section id="education" class="py-16 md:py-24 animated-section relative z-10">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center border-b-4 border-[#3b82f6] pb-2 inline-block">Education & Grades</h2>
+                <div class="flex flex-col gap-10">
+                    
+					 <!-- Software Development Entry -->
+                    <div class="relative bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border-l-4 border-[#3b82f6] md:w-full">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-semibold text-white">CTU Training Solutions</h3>
+                                <p class="text-xl text-[#c6d8e2]">Software Development (NQF 6)</p>
+                            </div>
+                            <span class="text-lg text-[#c6d8e2] mt-2 md:mt-0">2021-2024</span>
+                        </div>
+                        <ul class="text-lg text-[#c6d8e2] space-y-2">
+                            <li>Beginner Java: 70%</li>
+                            <li>Programming With C#: 68%</li>
+                            <li>Solutions Development: 70%</li>
+                            <li>Advanced Java: 76%</li>
+                            <li>Business Programming: 88%</li>
+                            <li>Developers and Operations Engineering: 75%</li>
+                            <li>Work Integrated Learning: 100%</li>
+                        </ul>
+                    </div>
+					
+                    <!-- Programming Foundation Entry -->
+                    <div class="relative bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border-l-4 border-[#3b82f6] md:w-full">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-semibold text-white">CTU Training Solutions</h3>
+                                <p class="text-xl text-[#c6d8e2]">Programming Foundation (NQF 4)</p>
+                            </div>
+                            <span class="text-lg text-[#c6d8e2] mt-2 md:mt-0">2021-2024</span>
+                        </div>
+                        <ul class="text-lg text-[#c6d8e2] space-y-2">
+                            <li>Programming Foundations: 90.72%</li>
+                            <li>C# & Java: 92.61%</li>
+                            <li>Web Development: 86.91%</li>
+                            <li>Cybernetics: 85.73%</li>
+                            <li>Digital Literacy: 89.35%</li>
+                            <li>Network Architecture: 86.54%</li>
+                            <li>Programmer Ethics: 87.13%</li>
+                            <li>Robotic Development: 90.27%</li>
+                        </ul>
+                    </div>
+
+                   
+                    
+                     <!-- Hoërskool School Jan Viljoen Entry -->
+                    <div class="relative bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border-l-4 border-[#3b82f6] md:w-full">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-semibold text-white">Hoërskool School Jan Viljoen</h3>
+                                <p class="text-xl text-[#c6d8e2]">Matric</p>
+                            </div>
+                            <span class="text-lg text-[#c6d8e2] mt-2 md:mt-0">2020</span>
+                        </div>
+						 <ul class="text-lg text-[#c6d8e2] space-y-2">
+                            <li>Afrikaans</li>
+                            <li>English</li>
+                            <li>Manthamatical Literacy</li>
+                            <li>Life Orientation</li>
+                            <li>Computer Application Technology</li>
+                            <li>Engineering Graphics and Design</li>
+                            <li>Visual Arts</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Experience Section -->
+        <section id="experience" class="py-16 md:py-24 bg-[#0a113a] animated-section relative z-10">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 text-center border-b-4 border-[#3b82f6] pb-2 inline-block">Work Experience</h2>
+                <div class="flex flex-col gap-10">
+                    
+                    <!-- CAN Infinity Entry -->
+                    <div class="bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border-l-4 border-[#3b82f6]">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-semibold text-white">Marketing & Application Design</h3>
+                                <p class="text-xl text-[#c6d8e2]">CAN Infinity</p>
+                            </div>
+                            <span class="text-lg text-[#c6d8e2] mt-2 md:mt-0">July 2024 - Present</span>
+                        </div>
+                        <ul class="text-lg text-[#c6d8e2] list-disc pl-6 space-y-2">
+                            <li>Created advertisements and marketing materials using Canva.</li>
+                            <li>White-labeled important documents for branding and consistency.</li>
+                            <li>Designed mockups for an app and its functionality.</li>
+                            <li>Transitioned into working with Flutter Flow to improve designs and functionalities for the Emergency Assist app.</li>
+                        </ul>
+                        <!-- Reference Section for CAN Infinity -->
+                        <div class="mt-4 pt-4 border-t border-[#3b82f6]">
+                            <h4 class="text-xl font-semibold text-white mb-2">Reference</h4>
+                            <p class="text-lg text-[#c6d8e2]">
+                                Name: Louis Pieters<br>
+                                Contact: 076 959 5858<br>
+                                Relationship: Manager
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- PCMP Entry -->
+                    <div class="bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border-l-4 border-[#3b82f6]">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-semibold text-white">Junior Programmer</h3>
+                                <p class="text-xl text-[#c6d8e2]">PCMP</p>
+                            </div>
+                            <span class="text-lg text-[#c6d8e2] mt-2 md:mt-0">April 2022 - May 2024</span>
+                        </div>
+                        <ul class="text-lg text-[#c6d8e2] list-disc pl-6 space-y-2">
+                            <li>Adapted a SCADA system to assist in automating and managing industrial processes.</li>
+                            <li>Managed an archestra System that enables users to design, build, and deploy industrial automation solutions in a flexible and scalable manner.</li>
+                        </ul>
+                        <!-- Reference Section for PCMP -->
+                        <div class="mt-4 pt-4 border-t border-[#3b82f6]">
+                            <h4 class="text-xl font-semibold text-white mb-2">Reference</h4>
+                            <p class="text-lg text-[#c6d8e2]">
+                                Name: Christo Potgiter<br>
+                                Contact: 083 505 7581]<br>
+                                Relationship: Director
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <!-- VP Brewery Entry -->
+                    <div class="bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect border-l-4 border-[#3b82f6]">
+                        <div class="flex flex-col md:flex-row justify-between items-start mb-4">
+                            <div>
+                                <h3 class="text-2xl font-semibold text-white">Junior Brewer</h3>
+                                <p class="text-xl text-[#c6d8e2]">VP Brewery</p>
+                            </div>
+                            <span class="text-lg text-[#c6d8e2] mt-2 md:mt-0">January 2021 - February 2022</span>
+                        </div>
+                        <ul class="text-lg text-[#c6d8e2] list-disc pl-6 space-y-2">
+                            <li>Involved in the entire process of craft beer production, from start to finish.</li>
+                            <li>Promotion of craft beer in addition to other products, including malt, grain, yeast, and distillery components.</li>
+                        </ul>
+                       
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="py-16 md:py-24 animated-section relative z-10">
+            <div class="container mx-auto px-6 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-12 border-b-4 border-[#3b82f6] pb-2 inline-block">Get in Touch</h2>
+                <div class="flex flex-col md:flex-row justify-center items-center gap-10">
+                    
+                    <!-- Email Card -->
+                    <a href="mailto:tenikapotgieter901@gmail.com" class="group bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect w-full md:w-1/2 border border-transparent hover:border-[#3b82f6]">
+                        <div class="flex flex-col items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#3b82f6] mb-4 icon-pulse group-hover:scale-110"><rect width="20" height="16" x="2" y="4" rx="2"></rect><path d="m22 7-10 7L2 7"></path></svg>
+                            <h3 class="text-2xl font-semibold text-white">Email</h3>
+                            <p class="text-lg text-[#c6d8e2] break-all">tenikapotgieter901@gmail.com</p>
+                        </div>
+                    </a>
+                    
+                    <!-- Phone Card -->
+                    <div class="bg-[#191919] p-8 rounded-xl shadow-lg card-hover-effect w-full md:w-1/2 border border-transparent hover:border-[#3b82f6]">
+                        <div class="flex flex-col items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-[#3b82f6] mb-4 icon-pulse"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                            <h3 class="text-2xl font-semibold text-white">Phone</h3>
+                            <p class="text-lg text-[#c6d8e2]">060 800 6918</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-[#0a113a] text-[#a0aec0] py-6 text-center border-t border-[#1f2937]">
+            <p>&copy; 2024 Tenika Potgieter. All Rights Reserved.</p>
+        </footer>
+    </main>
+    
+    <!-- JavaScript for scroll animations and the wavy background -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // IntersectionObserver for section animations
+            const observerOptions = { threshold: 0.1 };
+            const sectionObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        sectionObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.animated-section').forEach(section => {
+                sectionObserver.observe(section);
+            });
+
+            // IntersectionObserver for list item and icon animations (staggered effect)
+            const listItemAndIconObserver = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const items = entry.target.querySelectorAll('.animated-list-item');
+                        items.forEach((item, index) => {
+                            item.style.transitionDelay = `${index * 0.15}s`;
+                            item.classList.add('is-visible');
+                        });
+                        const icons = entry.target.querySelectorAll('.icon-pulse');
+                        icons.forEach(icon => {
+                            icon.classList.add('is-visible');
+                        });
+                        listItemAndIconObserver.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll('.animated-section ul').forEach(list => { listItemAndIconObserver.observe(list); });
+            document.querySelectorAll('.animated-section .flex-col').forEach(card => { listItemAndIconObserver.observe(card); });
+
+            /* NEW: JavaScript for the dynamic wavy background effect */
+            const canvas = document.getElementById('waveCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Set up variables for the waves
+            let waveCount = 5;
+            let waves = [];
+            let scrollOffset = 0;
+            let time = 0;
+
+            // Define the properties for each wave
+            for (let i = 0; i < waveCount; i++) {
+                waves.push({
+                    amplitude: 50 + Math.random() * 80,
+                    frequency: (Math.random() * 0.005) + 0.003,
+                    speed: (Math.random() * 0.01) + 0.005,
+                    color: `rgba(59, 130, 246, ${0.1 + Math.random() * 0.15})` // Transparent blues
+                });
+            }
+
+            // Function to resize the canvas to fill the window
+            function setCanvasSize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+
+            // The main animation loop
+            function animateWaves() {
+                // Clear the canvas on each frame
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Update time for continuous wave motion
+                time += 0.05;
+
+                // Loop through each wave and draw it
+                waves.forEach((wave, index) => {
+                    ctx.beginPath();
+                    
+                    // The wave starts at the bottom of the canvas
+                    ctx.moveTo(0, canvas.height);
+                    
+                    // Draw the top curve of the wave
+                    for (let x = 0; x < canvas.width; x++) {
+                        // The y-position is a sine wave function
+                        // `time` makes it animate, `scrollOffset` makes it move with scrolling, `index` staggers the waves
+                        let y = Math.sin(x * wave.frequency + time * wave.speed + scrollOffset * 0.002 + index * 10) * wave.amplitude;
+                        // Add the offset to center the waves vertically on the screen
+                        ctx.lineTo(x, canvas.height / 2 + y);
+                    }
+                    
+                    // Close the path by drawing back to the bottom right and then bottom left
+                    ctx.lineTo(canvas.width, canvas.height);
+                    ctx.closePath();
+                    
+                    ctx.fillStyle = wave.color;
+                    ctx.fill();
+                });
+                
+                // Request the next animation frame
+                requestAnimationFrame(animateWaves);
+            }
+
+            // Event listeners
+            window.addEventListener('resize', setCanvasSize);
+            window.addEventListener('scroll', () => {
+                // Update the scroll offset
+                scrollOffset = window.scrollY;
+            });
+            
+            // Start the canvas animation when the page loads
+            setCanvasSize();
+            animateWaves();
+        });
+    </script>
+</body>
+</html>
