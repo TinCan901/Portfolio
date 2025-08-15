@@ -3,118 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jesse Britz | Education</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>Tenika Potgieter - Portfolio</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <header>
-        <div class="container">
-            <h1>Jesse Britz</h1>
-            <h2>Cyber Security Analyst & Software Developer</h2>
-            
-            <button class="mobile-menu-toggle" aria-expanded="false" aria-label="Main menu">
-                <i class="fas fa-bars"></i>
-            </button>
-            
-            <nav>
-                <ul>
-                    <li><a href="index.html"><i class="fas fa-home"></i> <span>Home</span></a></li>
-                    <li><a href="about.html" class="active"><i class="fas fa-user-graduate"></i> <span>Education</span></a></li>
-                    <li><a href="experience.html"><i class="fas fa-briefcase"></i> <span>Experience</span></a></li>
-                    <li><a href="skills.html"><i class="fas fa-laptop-code"></i> <span>Skills</span></a></li>
-                    <li><a href="contact.html"><i class="fas fa-envelope"></i> <span>Contact</span></a></li>
-                </ul>
+<body class="bg-[#060a1f] text-[#e0f2ff]">
+
+    <canvas id="waveCanvas"></canvas>
+
+    <header id="main-header" class="fixed top-0 left-0 right-0 z-50 bg-[#060a1f] bg-opacity-70 backdrop-blur-sm shadow-lg transition-shadow duration-300">
+        <nav class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="index.html" class="text-2xl font-extrabold text-[#3b82f6]">Tenika Potgieter</a>
+            <div class="hidden md:flex space-x-8 text-lg font-medium">
+                <a href="about.html" class="hover:text-[#3b82f6] transition-colors duration-300">About</a>
+                <a href="skills.html" class="hover:text-[#3b82f6] transition-colors duration-300">Skills</a>
+                <a href="experience.html" class="hover:text-[#3b82f6] transition-colors duration-300">Experience</a>
+                <a href="contact.html" class="hover:text-[#3b82f6] transition-colors duration-300">Contact</a>
+            </div>
             </nav>
-        </div>
     </header>
 
-    <main class="container">
-        <section id="about">
-            <h2><i class="fas fa-user-graduate"></i> Education & Qualifications</h2>
-            
-            <div class="timeline">
-                <div class="timeline-item">
-                    <h3>2024 – 2024</h3>
-                    <div class="timeline-content">
-                        <h4>National Certificate: Cyber Security (NQF 6)</h4>
-                        <p class="institution">CTU Training Solutions</p>
-                        <ul class="subjects">
-                            <li>Administering Database Infrastructure (ADI632) - 97%</li>
-                            <li>Advanced Design Patterns (ADP631) - 88%</li>
-                            <li>Advanced Server Security (AD632) - 93%</li>
-                            <li>Cybersecurity Professional Practice (CSP632) - 86%</li>
-                            <li>Data Solution Development (DSD631) - 81%</li>
-                            <li>IT Project Management (ITP631) - 78%</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <h3>2023 – 2023</h3>
-                    <div class="timeline-content">
-                        <h4>National Certificate: Software Development (NQF 5)</h4>
-                        <p class="institution">CTU Training Solutions</p>
-                        <ul class="subjects">
-                            <li>Beginner Java - 83%</li>
-                            <li>Programming with C# - 82%</li>
-                            <li>Solutions Development - 82%</li>
-                            <li>Developers and Operations Engineering - 72%</li>
-                            <li>Advanced Java - 86%</li>
-                            <li>Business Programming - 87%</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <h3>2022 – 2022</h3>
-                    <div class="timeline-content">
-                        <h4>National Certificate: System Development (NQF 4)</h4>
-                        <p class="institution">CTU Training Solutions</p>
-                        <ul class="subjects">
-                            <li>Computer Architecture</li>
-                            <li>Digital Literacy and Proficiency</li>
-                            <li>Principles of Program Design</li>
-                            <li>Programming with Python</li>
-                            <li>Cloud Fundamentals</li>
-                            <li>Core Web Development</li>
-                            <li>Network Architecture</li>
-                            <li>Robotic Development</li>
-                        </ul>
-                    </div>
-                </div>
-                
-                <div class="timeline-item">
-                    <h3>2017 - 2021</h3>
-                    <div class="timeline-content">
-                        <h4>National Senior Certificate (NQF 4)</h4>
-                        <p class="institution">Hoërskool Florida</p>
-                        <ul class="subjects">
-                            <li>Afrikaans</li>
-                            <li>English</li>
-                            <li>Mathematics</li>
-                            <li>Accounting</li>
-                            <li>Information Technology</li>
-                            <li>Physical Sciences</li>
-                            <li>Life Orientation</li>
-                        </ul>
-                    </div>
-                </div>
+    <main class="pt-20">
+        
+        <section id="hero" class="relative h-screen flex items-center justify-center p-8 bg-cover bg-center">
+            <div class="relative z-10 text-center max-w-5xl">
+                <h1 class="animate-hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-4 text-white drop-shadow-lg">Hello, I'm <span class="text-[#3b82f6]">Tenika Potgieter</span>.</h1>
+                <p class="animate-hero-subtitle text-xl sm:text-2xl font-light mb-8 text-[#e0f2ff]">A Software Developer with a passion for creative and dedicated problem-solving.</p>
+                <a href="about.html" class="animate-hero-button inline-block bg-[#2563eb] text-white font-bold py-4 px-10 rounded-full shadow-lg button-hover-effect active:scale-95">Explore My Work</a>
             </div>
         </section>
+
+        <footer class="bg-[#0a113a] text-[#a0aec0] py-6 text-center border-t border-[#1f2937]">
+            <p>&copy; 2024 Tenika Potgieter. All Rights Reserved.</p>
+        </footer>
     </main>
-
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 Jesse Britz. All rights reserved.</p>
-        </div>
-    </footer>
-
-    <script src="mobile-menu.js"></script>
     
+    <script src="mobile-menu.js"></script>
 </body>
 </html>
-
-
-
-
